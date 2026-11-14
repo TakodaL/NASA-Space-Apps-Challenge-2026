@@ -1,0 +1,67 @@
+
+{
+  "round": 5,
+  "title": "Solve the Mystery",
+  "question": "Mars, 2012. Our rover has discovered these stones. Something may have carried them here a very long time ago. What happened?",
+  "steps": [
+    "clues",
+    "hypothesis",
+    "results",
+    "debrief"
+  ],
+  "causes": [
+    "wind",
+    "flowing_water",
+    "ice",
+    "volcano"
+  ],
+  "clues": {
+    "shape": {
+      "team": 1,
+      "title": "Shape detectives",
+      "text": "These stones have rounded edges. When stones roll and knock against each other over time, their sharp corners can wear away.",
+      "image": "https://svs.gsfc.nasa.gov/vis/a030000/a030500/a030527/conglomerate_mars_vs_earth_pia16189.jpg",
+      "isEvidence": true
+    },
+    "size": {
+      "team": 2,
+      "title": "Size detectives",
+      "text": "These are not just tiny grains of dust. According to scientists, the pebbles were too large for wind to explain how they were transported.",
+      "image": "https://assets.science.nasa.gov/content/dam/science/psd/mars/resources/detail_files/5316_pia17062_Hottah_WB-full2.jpg",
+      "isEvidence": true
+    },
+    "rock": {
+      "team": 3,
+      "title": "Rock detectives",
+      "text": "Small stones and grains of sand are held together inside hardened rock. Before they became solid rock, these materials collected together.",
+      "image": "https://d2pn8kiwq2w21t.cloudfront.net/original_images/jpegPIA16156.jpg",
+      "isEvidence": true
+    },
+    "earth": {
+      "team": 4,
+      "title": "Earth detectives",
+      "text": "On Earth, flowing water can move sand and pebbles. Stones become rounder as they roll and knock together. When the current slows down, it leaves material behind.",
+      "image": "https://svs.gsfc.nasa.gov/vis/a030000/a030500/a030527/conglomerate_mars_vs_earth_pia16189.jpg",
+      "isEvidence": true
+    },
+    "stones_red": {
+      "text": "The stones are red.",
+      "isEvidence": false
+    },
+    "mars_cold": {
+      "text": "Mars is cold.",
+      "isEvidence": false
+    }
+  },
+  "hypothesis": {
+    "requiredReasons": 2
+  },
+  "scoring": {
+    "correctCause": "flowing_water",
+    "causePoints": 1,
+    "evidencePoints": 1,
+    "maxPoints": 3
+  },
+  "conclusion": "The evidence suggests that an ancient stream once flowed through this place. Water carried the pebbles and sand, which eventually formed a hardened deposit.",
+  "announcementDate": "September 27, 2012"
+}

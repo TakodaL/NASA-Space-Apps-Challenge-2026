@@ -1,0 +1,96 @@
+
+{
+  "round": 1,
+  "title": "Moon Landing Site Selection",
+  "steps": [
+    "briefing",
+    "investigate",
+    "submit",
+    "share",
+    "decide",
+    "reveal",
+    "debrief"
+  ],
+  "locations": {
+    "A": "Mons Mouton Plateau",
+    "B": "Malapert Massif",
+    "C": "Nobile Rim 1"
+  },
+  "jobs": {
+    "energy": {
+      "name": "Energy",
+      "data": {
+        "sunlight": {
+          "A": 45,
+          "B": 31,
+          "C": 38,
+          "unit": "%"
+        }
+      }
+    },
+    "water": {
+      "name": "Water",
+      "data": {
+        "map": "Permanently shadowed areas and possible ice deposits",
+        "hint": {
+          "text": "NASA's LRO spacecraft measured -248 °C (25 K) inside a dark crater near the Moon's north pole: one of the coldest places ever measured in the solar system. Dark craters near the south pole are just as cold. Some have not seen sunlight for billions of years, so ice there can stay frozen.",
+          "label": "Saved"
+        }
+      }
+    },
+    "terrain": {
+      "name": "Terrain",
+      "data": {
+        "averageSlope": {
+          "A": 7.4,
+          "B": 5.6,
+          "C": 6.3,
+          "unit": "degrees"
+        },
+        "suitableLandingArea": {
+          "A": 564.8,
+          "B": 7.1,
+          "C": 22.2,
+          "unit": "km2"
+        }
+      }
+    },
+    "communications": {
+      "name": "Communications",
+      "data": {
+        "earthVisibility": {
+          "A": 74,
+          "B": 41,
+          "C": 68,
+          "unit": "%"
+        }
+      }
+    }
+  },
+  "results": {
+    "ranking": [
+      "A",
+      "C",
+      "B"
+    ],
+    "points": {
+      "A": 3,
+      "C": 2,
+      "B": 1
+    },
+    "waterSupplies": {
+      "A": {
+        "thickWaterBags": 1,
+        "wideWaterBags": 2
+      },
+      "C": {
+        "thickWaterBags": 1,
+        "wideWaterBags": 1
+      },
+      "B": {
+        "thickWaterBags": 0,
+        "wideWaterBags": 1
+      }
+    }
+  }
+}

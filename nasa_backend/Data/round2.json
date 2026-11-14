@@ -1,0 +1,83 @@
+
+{
+  "round": 2,
+  "title": "The Martian Dust Storm",
+  "steps": [
+    "alert",
+    "investigate",
+    "plan",
+    "dayResult",
+    "day2Alert",
+    "plan",
+    "dayResult",
+    "result",
+    "debrief"
+  ],
+  "initialBattery": 8,
+  "systems": {
+    "lifeSupport": {
+      "levels": {
+        "off": {
+          "cost": 0,
+          "outcome": "unsafe air"
+        },
+        "basic": {
+          "cost": 1,
+          "outcome": "safe air maintained"
+        },
+        "high": {
+          "cost": 2,
+          "outcome": "additional air-processing capacity"
+        }
+      }
+    },
+    "food": {
+      "levels": {
+        "off": {
+          "cost": 0,
+          "outcome": "growth pauses temporarily"
+        },
+        "low": {
+          "cost": 1,
+          "outcome": "limited plant growth"
+        },
+        "high": {
+          "cost": 2,
+          "outcome": "normal plant growth"
+        }
+      }
+    },
+    "temperature": {
+      "levels": {
+        "off": {
+          "cost": 0,
+          "outcome": "too cold"
+        },
+        "basic": {
+          "cost": 1,
+          "outcome": "safe minimum temperature maintained"
+        },
+        "high": {
+          "cost": 2,
+          "outcome": "additional heating"
+        }
+      }
+    },
+    "communications": {
+      "levels": {
+        "off": {
+          "cost": 0,
+          "outcome": "no message"
+        },
+        "short": {
+          "cost": 1,
+          "outcome": "basic status report"
+        },
+        "long": {
+          "cost": 2,
+          "outcome": "detailed transmission to Earth"
+        }
+      }
+    }
+  }
+}

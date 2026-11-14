@@ -1,0 +1,57 @@
+
+{
+  "round": 4,
+  "title": "Pack Your Space Lunch",
+  "firstTimerMinutes": 3,
+  "improveTimerMinutes": 1,
+  "limits": {
+    "minEnergy": 12,
+    "maxEnergy": 14,
+    "maxSpace": 9,
+    "maxWater": 2
+  },
+  "foods": {
+    "chicken_and_rice": {
+      "name": "Chicken and rice",
+      "preparation": "Add water",
+      "space": 1,
+      "water": 1,
+      "energy": 3
+    },
+    "spaghetti_with_meat": {
+      "name": "Spaghetti with meat",
+      "preparation": "Add water",
+      "space": 1,
+      "water": 1,
+      "energy": 3
+    },
+    "beef_and_gravy": {
+      "name": "Beef and gravy",
+      "preparation": "No added water",
+      "space": 3,
+      "water": 0,
+      "energy": 3
+    },
+    "turkey_and_gravy": {
+      "name": "Turkey and gravy",
+      "preparation": "No added water",
+      "space": 3,
+      "water": 0,
+      "energy": 3
+    },
+    "dried_apricot_bites": {
+      "name": "Dried apricot bites",
+      "preparation": "No added water",
+      "space": 1,
+      "water": 0,
+      "energy": 1
+    },
+    "chocolate_bar": {
+      "name": "Chocolate bar",
+      "preparation": "No added water",
+      "space": 1,
+      "water": 0,
+      "energy": 2
+    }
+  }
+}

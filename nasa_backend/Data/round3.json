@@ -1,0 +1,105 @@
+
+{
+  "round": 3,
+  "title": "Solar Storm Emergency",
+  "steps": [
+    "alert",
+    "rescuePlan",
+    "rescue",
+    "shelterAlert",
+    "shelterBuild",
+    "shelterResults",
+    "debrief"
+  ],
+  "rescue": {
+    "deadlineMinutes": 8,
+    "roverBatteryCost": 1,
+    "travelTimes": [
+      {
+        "walking": 4,
+        "rover": 3
+      },
+      {
+        "walking": 7,
+        "rover": 5
+      },
+      {
+        "walking": 11,
+        "rover": 6
+      }
+    ],
+    "pointsPerExplorer": 1,
+    "maxPoints": 3,
+    "alert": {
+      "date": "September 10, 2017",
+      "time": "19:50 UTC",
+      "eventIds": [
+        "2017-09-10T16:09:00-CME-001",
+        "2017-09-10T16:25:00-SEP-001"
+      ],
+      "label": "Saved"
+    }
+  },
+  "shelter": {
+    "areas": ["A", "B", "C"],
+    "objects": {
+      "thick_water_bag": {
+        "coverage": 1,
+        "layers": 2,
+        "availableBySite": {
+          "A": 1,
+          "B": 0,
+          "C": 1
+        }
+      },
+      "wide_water_bag": {
+        "coverage": 2,
+        "layers": 1,
+        "availableBySite": {
+          "A": 2,
+          "B": 1,
+          "C": 1
+        }
+      },
+      "packed_food_bag": {
+        "coverage": 1,
+        "layers": 2,
+        "available": 1,
+        "dependsOnRound2": true
+      },
+      "wide_clothing_bag": {
+        "coverage": 2,
+        "layers": 1,
+        "available": 1
+      },
+      "empty_storage_bag": {
+        "coverage": 1,
+        "layers": 0,
+        "available": 1
+      }
+    },
+    "objectsToPlace": 3,
+    "pointsPerArea": {
+      "0": 0,
+      "1": 1,
+      "2": 2
+    },
+    "maxPoints": 6
+  },
+  "science": {
+    "radiationData": {
+      "label": "Saved",
+      "source": "NASA OSDR Environmental Data App",
+      "mission": "Rodent Research-1",
+      "period": "September 21 - October 29, 2014",
+      "dailyDoseAverage": 0.20,
+      "dailyDoseMin": 0.19,
+      "dailyDoseMax": 0.23,
+      "dailyDoseUnit": "mGy",
+      "accumulatedDose": 7.96,
+      "accumulatedDoseUnit": "mGy",
+      "durationDays": 39
+    },
+    "shelterFact": "NASA astronauts use storage compartments as emergency shelters, placing bags containing food, water and other supplies around themselves."
+  }
+}
