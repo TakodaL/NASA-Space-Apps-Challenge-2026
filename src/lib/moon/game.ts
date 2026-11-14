@@ -5,6 +5,12 @@
 // Only the class screen writes `GameState`; teams write `TeamAct`s.
 
 import type { SiteId, TeamId } from "@/lib/moon/model";
+// Single source of truth for round numbers: the shared data files (also used by the Python backend and its tests).
+import round1 from "../../../nasa_backend/Data/round1.json" with { type: "json" };
+import round2 from "../../../nasa_backend/Data/round2.json" with { type: "json" };
+import round3 from "../../../nasa_backend/Data/round3.json" with { type: "json" };
+import round4 from "../../../nasa_backend/Data/round4.json" with { type: "json" };
+import round5 from "../../../nasa_backend/Data/round5.json" with { type: "json" };
 
 const TEAM_IDS: TeamId[] = ["energy", "water", "terrain", "comms"];
 
@@ -25,7 +31,14 @@ export const INTRO_MINUTES = 4;
 
 /** Score keys: Round 3 has two parts. */
 export type ScoreKey = "1" | "2" | "3a" | "3b" | "4" | "5";
-export const SCORE_MAX: Record<ScoreKey, number> = { "1": 3, "2": 3, "3a": 3, "3b": 6, "4": 3, "5": 3 };
+export const SCORE_MAX: Record<ScoreKey, number> = {
+  "1": Math.max(...Object.values(round1.results.points)),
+  "2": 3,
+  "3a": round3.rescue.maxPoints,
+  "3b": round3.shelter.maxPoints,
+  "4": 3,
+  "5": round5.scoring.maxPoints,
+};
 export const SCORE_LABEL: Record<ScoreKey, string> = {
   "1": "Round 1 · Moon base",
   "2": "Round 2 · Dust storm",
@@ -39,10 +52,11 @@ export function scoreKeysFor(round: RoundId): ScoreKey[] {
 }
 
 /** Round 1 site → water bags for the Round 3 shelter (C5). */
+const WATER = round1.results.waterSupplies;
 export const WATER_BY_SITE: Record<SiteId, { thick: number; wide: number }> = {
-  A: { thick: 1, wide: 2 },
-  C: { thick: 1, wide: 1 },
-  B: { thick: 0, wide: 1 },
+  A: { thick: WATER.A.thickWaterBags, wide: WATER.A.wideWaterBags },
+  B: { thick: WATER.B.thickWaterBags, wide: WATER.B.wideWaterBags },
+  C: { thick: WATER.C.thickWaterBags, wide: WATER.C.wideWaterBags },
 };
 
 /* ------------------------------------------------------------------ */
@@ -103,7 +117,18 @@ export const SYSTEM_INFO: Record<
     ],
   },
 };
-export const START_POWER = 8;
+export const START_POWER: number = round2.initialBattery;
+
+/** Energy cost of each level, read from the data file (OFF / BASIC|LOW|SHORT / HIGH|LONG). */
+const SYS_KEY: Record<SystemId, keyof typeof round2.systems> = {
+  life: "lifeSupport",
+  food: "food",
+  heat: "temperature",
+  comms: "communications",
+};
+export const LEVEL_COST: Record<SystemId, [number, number, number]> = Object.fromEntries(
+  SYSTEMS.map((sys) => [sys, Object.values(round2.systems[SYS_KEY[sys]].levels).map((l) => l.cost) as [number, number, number]]),
+) as Record<SystemId, [number, number, number]>;
 export const DELAY_MINUTES = 12; // C4: average Mars–Earth one-way delay
 
 export type Level = 0 | 1 | 2;
@@ -121,12 +146,9 @@ export type R2State = {
 /* Round 3 · solar storm                                               */
 /* ------------------------------------------------------------------ */
 
-export const RESCUE_DEADLINE = 8;
-export const RESCUE_PAIRS: [number, number][] = [
-  [4, 3],
-  [7, 5],
-  [11, 6],
-];
+export const RESCUE_DEADLINE: number = round3.rescue.deadlineMinutes;
+export const ROVER_COST: number = round3.rescue.roverBatteryCost;
+export const RESCUE_PAIRS: [number, number][] = round3.rescue.travelTimes.map((t) => [t.walking, t.rover] as [number, number]);
 export const MISSION_CONTROL: TeamId = "energy";
 export const EXPLORERS: TeamId[] = ["water", "terrain", "comms"];
 
@@ -138,13 +160,16 @@ export type R3State = {
 };
 
 export type ShelterObject = "thick" | "wide" | "food" | "clothing" | "empty";
+const OBJ = round3.shelter.objects;
 export const SHELTER_INFO: Record<ShelterObject, { label: string; wide: boolean; layers: number }> = {
-  thick: { label: "Thick water bag", wide: false, layers: 2 },
-  wide: { label: "Wide water bag", wide: true, layers: 1 },
-  food: { label: "Packed food bag", wide: false, layers: 2 },
-  clothing: { label: "Wide clothing bag", wide: true, layers: 1 },
-  empty: { label: "Empty storage bag", wide: false, layers: 0 },
+  thick: { label: "Thick water bag", wide: OBJ.thick_water_bag.coverage === 2, layers: OBJ.thick_water_bag.layers },
+  wide: { label: "Wide water bag", wide: OBJ.wide_water_bag.coverage === 2, layers: OBJ.wide_water_bag.layers },
+  food: { label: "Packed food bag", wide: OBJ.packed_food_bag.coverage === 2, layers: OBJ.packed_food_bag.layers },
+  clothing: { label: "Wide clothing bag", wide: OBJ.wide_clothing_bag.coverage === 2, layers: OBJ.wide_clothing_bag.layers },
+  empty: { label: "Empty storage bag", wide: OBJ.empty_storage_bag.coverage === 2, layers: OBJ.empty_storage_bag.layers },
 };
+const POINTS_PER_AREA = round3.shelter.pointsPerArea as Record<string, number>;
+const MAX_AREA_LAYERS = Math.max(...Object.keys(POINTS_PER_AREA).map(Number));
 export type Area = "A" | "B" | "C";
 /** For wide objects the spot is "AB" or "BC". */
 export type Placement = { obj: ShelterObject; spot: "A" | "B" | "C" | "AB" | "BC" };
@@ -153,16 +178,17 @@ export type Placement = { obj: ShelterObject; spot: "A" | "B" | "C" | "AB" | "BC
 /* Round 4 · lunch (Apollo 12 menu)                                    */
 /* ------------------------------------------------------------------ */
 
-export type FoodId = "chicken" | "spaghetti" | "beef" | "turkey" | "apricot" | "chocolate";
-export const FOODS: { id: FoodId; label: string; prep: string; space: number; water: number; energy: number }[] = [
-  { id: "chicken", label: "Chicken and rice", prep: "Add water", space: 1, water: 1, energy: 3 },
-  { id: "spaghetti", label: "Spaghetti with meat", prep: "Add water", space: 1, water: 1, energy: 3 },
-  { id: "beef", label: "Beef and gravy", prep: "No added water", space: 3, water: 0, energy: 3 },
-  { id: "turkey", label: "Turkey and gravy", prep: "No added water", space: 3, water: 0, energy: 3 },
-  { id: "apricot", label: "Dried apricot bites", prep: "No added water", space: 1, water: 0, energy: 1 },
-  { id: "chocolate", label: "Chocolate bar", prep: "No added water", space: 1, water: 0, energy: 2 },
-];
-export const LUNCH_LIMITS = { energyMin: 12, energyMax: 14, space: 9, water: 2 };
+export type FoodId = string;
+export const FOODS: { id: FoodId; label: string; prep: string; space: number; water: number; energy: number }[] = Object.entries(
+  round4.foods,
+).map(([id, f]) => ({ id, label: f.name, prep: f.preparation, space: f.space, water: f.water, energy: f.energy }));
+export const LUNCH_LIMITS = {
+  energyMin: round4.limits.minEnergy,
+  energyMax: round4.limits.maxEnergy,
+  space: round4.limits.maxSpace,
+  water: round4.limits.maxWater,
+};
+export const LUNCH_MINUTES = { pack: round4.firstTimerMinutes, improve: round4.improveTimerMinutes };
 
 export function lunchTotals(foods: FoodId[]): { energy: number; space: number; water: number } {
   let energy = 0;
@@ -194,50 +220,42 @@ export function lunchPoints(foods: FoodId[]): { points: number; ok: { energy: bo
 /* Round 5 · mystery                                                   */
 /* ------------------------------------------------------------------ */
 
-export type ClueId = "shape" | "size" | "rock" | "earth" | "red" | "cold";
-export const MYSTERY_CLUES: Record<TeamId, { id: ClueId; team: string; text: string; because: string }> = {
-  energy: {
-    id: "shape",
-    team: "Shape detectives",
-    text: "These stones have rounded edges. When stones roll and knock against each other over time, their sharp corners can wear away.",
-    because: "the stones have rounded edges",
-  },
-  water: {
-    id: "size",
-    team: "Size detectives",
-    text: "These are not just tiny grains of dust. According to scientists, the pebbles were too large for wind to explain how they were transported.",
-    because: "the pebbles are too big for wind to move",
-  },
-  terrain: {
-    id: "rock",
-    team: "Rock detectives",
-    text: "Small stones and grains of sand are held together inside hardened rock. Before they became solid rock, these materials collected together.",
-    because: "they are held together in hardened rock",
-  },
-  comms: {
-    id: "earth",
-    team: "Earth detectives",
-    text: "On Earth, flowing water can move sand and pebbles. Stones become rounder as they roll and knock together. When the current slows down, it leaves material behind.",
-    because: "flowing water on Earth does the same thing",
-  },
+export type ClueId = string;
+const TEAM_BY_NUMBER: Record<number, TeamId> = { 1: "energy", 2: "water", 3: "terrain", 4: "comms" };
+/** Short "because…" wording for each clue (screen text; the clue itself comes from the data file). */
+const BECAUSE: Record<string, string> = {
+  shape: "the stones have rounded edges",
+  size: "the pebbles are too big for wind to move",
+  rock: "they are held together in hardened rock",
+  earth: "flowing water on Earth does the same thing",
+  stones_red: "the stones are red",
+  mars_cold: "Mars is cold",
 };
-export const DISTRACTORS: { id: ClueId; because: string }[] = [
-  { id: "red", because: "the stones are red" },
-  { id: "cold", because: "Mars is cold" },
-];
-export const CAUSES = ["wind", "flowing water", "ice", "a volcano"] as const;
-export type Cause = (typeof CAUSES)[number];
-const REAL_CLUES: ClueId[] = ["shape", "size", "rock", "earth"];
+const CLUE_DATA = round5.clues as Record<string, { team?: number; title?: string; text?: string; isEvidence: boolean }>;
+export const MYSTERY_CLUES = Object.fromEntries(
+  Object.entries(CLUE_DATA)
+    .filter(([, c]) => c.team)
+    .map(([id, c]) => [TEAM_BY_NUMBER[c.team as number], { id, team: c.title ?? id, text: c.text ?? "", because: BECAUSE[id] ?? id }]),
+) as Record<TeamId, { id: ClueId; team: string; text: string; because: string }>;
+export const DISTRACTORS: { id: ClueId; because: string }[] = Object.entries(CLUE_DATA)
+  .filter(([, c]) => !c.isEvidence)
+  .map(([id]) => ({ id, because: BECAUSE[id] ?? id }));
+export type Cause = string;
+export const CAUSES: Cause[] = round5.causes;
+export const CORRECT_CAUSE: Cause = round5.scoring.correctCause;
+export function causeLabel(c: Cause): string {
+  return c === "volcano" ? "a volcano" : c.replace(/_/g, " ");
+}
+export const MYSTERY_QUESTION: string = round5.question;
+export const MYSTERY_ANSWER = `${round5.conclusion} NASA announced this evidence on ${round5.announcementDate}. Curiosity found signs of ancient flowing water, not a river flowing today.`;
 
 export function mysteryPoints(cause: Cause | null, because: ClueId[]): number {
-  let p = cause === "flowing water" ? 1 : 0;
-  const uniq = [...new Set(because)];
-  for (const c of uniq) if (REAL_CLUES.includes(c)) p += 1;
-  return Math.min(3, p);
+  let p = cause === CORRECT_CAUSE ? round5.scoring.causePoints : 0;
+  for (const c of [...new Set(because)]) if (CLUE_DATA[c]?.isEvidence) p += round5.scoring.evidencePoints;
+  return Math.min(round5.scoring.maxPoints, p);
 }
 export function becauseText(id: ClueId): string {
-  for (const t of TEAM_IDS) if (MYSTERY_CLUES[t].id === id) return MYSTERY_CLUES[t].because;
-  return DISTRACTORS.find((d) => d.id === id)?.because ?? id;
+  return BECAUSE[id] ?? id;
 }
 
 /* ------------------------------------------------------------------ */
@@ -349,7 +367,7 @@ function shuffle<T>(arr: T[]): T[] {
 /* Round 2 rules --------------------------------------------------------- */
 
 export function planTotal(plan: Partial<Record<SystemId, Level>>): number {
-  return SYSTEMS.reduce((s, id) => s + (plan[id] ?? 0), 0);
+  return SYSTEMS.reduce((s, id) => s + (plan[id] === undefined ? 0 : LEVEL_COST[id][plan[id] as Level]), 0);
 }
 
 /** Run one storm day with the plan. Returns the new game state (stage "result"). */
@@ -386,7 +404,7 @@ export function forecastText(r2: R2State): string {
 
 export function runRescue(g: GameState): GameState {
   const r3 = { ...g.r3 };
-  const roverOk = !!r3.rover && g.power >= 1;
+  const roverOk = !!r3.rover && g.power >= ROVER_COST;
   const safe: R3State["safe"] = {};
   for (const t of EXPLORERS) {
     const pair = r3.times[t];
@@ -400,7 +418,7 @@ export function runRescue(g: GameState): GameState {
   return {
     ...g,
     r3,
-    power: roverOk ? g.power - 1 : g.power,
+    power: roverOk ? g.power - ROVER_COST : g.power,
     scores: { ...g.scores, "3a": points },
     stage: "rescueResult",
     at: Date.now(),
@@ -408,7 +426,13 @@ export function runRescue(g: GameState): GameState {
 }
 
 export function inventory(g: GameState): Record<ShelterObject, number> {
-  return { thick: g.water.thick, wide: g.water.wide, food: g.foodBag ? 1 : 0, clothing: 1, empty: 1 };
+  return {
+    thick: g.water.thick,
+    wide: g.water.wide,
+    food: g.foodBag ? OBJ.packed_food_bag.available : 0,
+    clothing: OBJ.wide_clothing_bag.available,
+    empty: OBJ.empty_storage_bag.available,
+  };
 }
 
 export function shelterLayers(places: Placement[]): Record<Area, number> {
@@ -423,7 +447,7 @@ export function shelterLayers(places: Placement[]): Record<Area, number> {
 
 export function shelterPoints(places: Placement[]): number {
   const l = shelterLayers(places);
-  return (["A", "B", "C"] as Area[]).reduce((s, a) => s + Math.min(2, l[a]), 0);
+  return (["A", "B", "C"] as Area[]).reduce((s, a) => s + POINTS_PER_AREA[String(Math.min(MAX_AREA_LAYERS, l[a]))], 0);
 }
 
 /** Best score possible with this inventory (3 objects). */

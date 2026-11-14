@@ -1,7 +1,7 @@
 // Round 4 · Pack your space lunch (Apollo 12 menu, C18).
 import { useEffect, useState } from "react";
 import { play } from "@/lib/moon/audio";
-import { FOODS, LUNCH_LIMITS, lunchPoints, lunchTotals, readAct, type FoodId, type GameState } from "@/lib/moon/game";
+import { FOODS, LUNCH_LIMITS, LUNCH_MINUTES, lunchPoints, lunchTotals, readAct, type FoodId, type GameState } from "@/lib/moon/game";
 import { TEAMS, TEAM_META, type RoomState, type TeamId } from "@/lib/moon/model";
 import { sendAct, setGame } from "@/lib/moon/sync";
 import { NextRoundButton, ReadCard, SpeakButton, WaitCard } from "@/components/moon/GameUI";
@@ -20,7 +20,7 @@ export function Round4Main({ state, game }: { state: RoomState; game: GameState 
     return (
       <div className="grid items-start gap-4 lg:grid-cols-2">
         <Card className="rise">
-          <Eyebrow>Round 4 · Pack your space lunch · 3 minutes</Eyebrow>
+          <Eyebrow>Round 4 · Pack your space lunch · {LUNCH_MINUTES.pack} minutes</Eyebrow>
           <div className="mt-1 flex items-start gap-3">
             <h2 className="flex-1 font-display text-2xl font-semibold">Pack a lunch bag for the Moon</h2>
             <SpeakButton text={INTRO} />
@@ -39,7 +39,7 @@ export function Round4Main({ state, game }: { state: RoomState; game: GameState 
             ))}
           </ul>
           <Button className="mt-4" disabled={sent.length === 0} onClick={() => { play("tap"); setGame({ ...game, stage: "improve" }); }}>
-            Show the numbers (1 minute to improve)
+            Show the numbers ({LUNCH_MINUTES.improve} minute to improve)
           </Button>
         </Card>
       </div>
@@ -139,7 +139,7 @@ export function Round4Team({ state, game, team }: { state: RoomState; game: Game
   return (
     <Card className="rise mx-auto w-full max-w-xl">
       <Eyebrow>
-        {TEAM_META[team].label} · lunch bag {showNumbers ? "· improve it (1 minute)" : "· 3 minutes"}
+        {TEAM_META[team].label} · lunch bag {showNumbers ? `· improve it (${LUNCH_MINUTES.improve} minute)` : `· ${LUNCH_MINUTES.pack} minutes`}
       </Eyebrow>
       <div className="mt-3">
         <ReadCard text={showNumbers ? LIMITS : "Tap foods to pack or remove them. Space in your bag and water are limited!"} />

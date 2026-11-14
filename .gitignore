@@ -1,0 +1,19 @@
+node_modules/
+.project_id
+.github_repo
+.env
+.env.*
+
+# Build output (Vercel builds this itself; an old copy here gets served instead of the new code)
+.vercel/
+.output/
+dist/
+
+# Python backend
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.vscode/
+.pytest_cache/

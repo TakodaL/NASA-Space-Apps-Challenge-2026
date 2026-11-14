@@ -1,3 +1,4 @@
+import round1 from "../../../nasa_backend/Data/round1.json" with { type: "json" };
 import { mergeActs, mergeGame, sanitizeActs, sanitizeGame, type GameState, type TeamAct } from "@/lib/moon/game";
 
 export const TEAMS = ["energy", "water", "terrain", "comms"] as const;
@@ -57,50 +58,52 @@ export const SITE_FILL: Record<SiteId, string> = {
   C: "var(--color-good)",
 };
 
+const J = round1;
+
 export const SITES_DATA: Site[] = [
   {
     id: "A",
-    name: "Mons Mouton Plateau",
+    name: J.locations.A,
     short: "Mouton",
     tag: "Most sun, best Earth view, most room to land",
     x: 36,
     y: 48,
-    sun: 45,
+    sun: J.jobs.energy.data.sunlight.A,
     iceRank: 3,
-    slope: 7.4,
-    area: 564.8,
-    earth: 74,
-    points: 3,
+    slope: J.jobs.terrain.data.averageSlope.A,
+    area: J.jobs.terrain.data.suitableLandingArea.A,
+    earth: J.jobs.communications.data.earthVisibility.A,
+    points: J.results.points.A,
     waterBags: "1 thick + 2 wide water bags",
   },
   {
     id: "B",
-    name: "Malapert Massif",
+    name: J.locations.B,
     short: "Malapert",
     tag: "Gentlest slope, but little room to land",
     x: 56,
     y: 32,
-    sun: 31,
+    sun: J.jobs.energy.data.sunlight.B,
     iceRank: 1,
-    slope: 5.6,
-    area: 7.1,
-    earth: 41,
-    points: 1,
+    slope: J.jobs.terrain.data.averageSlope.B,
+    area: J.jobs.terrain.data.suitableLandingArea.B,
+    earth: J.jobs.communications.data.earthVisibility.B,
+    points: J.results.points.B,
     waterBags: "1 wide water bag",
   },
   {
     id: "C",
-    name: "Nobile Rim 1",
+    name: J.locations.C,
     short: "Nobile",
     tag: "A solid second choice",
     x: 64,
     y: 63,
-    sun: 38,
+    sun: J.jobs.energy.data.sunlight.C,
     iceRank: 2,
-    slope: 6.3,
-    area: 22.2,
-    earth: 68,
-    points: 2,
+    slope: J.jobs.terrain.data.averageSlope.C,
+    area: J.jobs.terrain.data.suitableLandingArea.C,
+    earth: J.jobs.communications.data.earthVisibility.C,
+    points: J.results.points.C,
     waterBags: "1 thick + 1 wide water bag",
   },
 ];

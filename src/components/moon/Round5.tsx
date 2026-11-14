@@ -3,8 +3,12 @@ import { useEffect, useState } from "react";
 import { play } from "@/lib/moon/audio";
 import {
   becauseText,
+  causeLabel,
   CAUSES,
+  CORRECT_CAUSE,
   DISTRACTORS,
+  MYSTERY_ANSWER,
+  MYSTERY_QUESTION,
   MYSTERY_CLUES,
   mysteryPoints,
   readAct,
@@ -17,10 +21,8 @@ import { sendAct, setGame } from "@/lib/moon/sync";
 import { NextRoundButton, ReadCard, SpeakButton, WaitCard } from "@/components/moon/GameUI";
 import { Button, Card, cn, Eyebrow } from "@/components/moon/ui";
 
-const PROMPT =
-  "Mars, 2012. Our rover has discovered these stones. Something may have carried them here a very long time ago. What happened?";
-const ANSWER =
-  "The evidence suggests that an ancient stream once flowed through this place. Water carried the pebbles and sand, which eventually formed a hardened deposit. NASA announced this evidence on 27 September 2012. Curiosity found signs of ancient flowing water, not a river flowing today.";
+const PROMPT = MYSTERY_QUESTION;
+const ANSWER = MYSTERY_ANSWER;
 
 type Answer = { cause: Cause | null; because: ClueId[] };
 const answerOf = (state: RoomState, t: TeamId) => readAct<Answer>(state.acts[t], "5");
@@ -96,7 +98,7 @@ export function Round5Main({ state, game }: { state: RoomState; game: GameState 
           {rows.map((r, i) => (
             <li key={r.t} className={cn("rounded-2xl px-4 py-3 text-sm leading-relaxed", i === 0 ? "bg-accent/15 ring-2 ring-accent" : "bg-bg/50")}>
               <b>{TEAM_META[r.t].label}:</b> moved by{" "}
-              <b className={r.a.cause === "flowing water" ? "text-good" : "text-warn"}>{r.a.cause ?? "…"}</b>
+              <b className={r.a.cause === CORRECT_CAUSE ? "text-good" : "text-warn"}>{r.a.cause ? causeLabel(r.a.cause) : "…"}</b>
               {r.a.because.map((c) => (
                 <span key={c}>
                   {" "}
@@ -107,7 +109,7 @@ export function Round5Main({ state, game }: { state: RoomState; game: GameState 
             </li>
           ))}
         </ul>
-        <p className="mt-3 text-xs text-faint">Points: 1 for "flowing water" + 1 for each real clue chosen (max 3). Green = a point.</p>
+        <p className="mt-3 text-xs text-faint">Points: 1 for "{causeLabel(CORRECT_CAUSE)}" + 1 for each real clue chosen (max 3). Green = a point.</p>
       </Card>
       <Card className="rise-2">
         <ReadCard title="What NASA found" text={ANSWER} tone="good" />
@@ -159,7 +161,7 @@ export function Round5Team({ state, game, team }: { state: RoomState; game: Game
             }}
             className={cn("min-h-11 rounded-full px-4 text-sm transition-transform active:scale-[0.96]", cause === c ? "bg-accent text-bg" : "bg-bg/50")}
           >
-            {c}
+            {causeLabel(c)}
           </button>
         ))}
       </div>
