@@ -22,6 +22,7 @@ import { Round2Main, Round2Team } from "@/components/moon/Round2";
 import { Round3Main, Round3Team } from "@/components/moon/Round3";
 import { Round4Main, Round4Team } from "@/components/moon/Round4";
 import { Round5Main, Round5Team } from "@/components/moon/Round5";
+import { Round6Main, Round6Team } from "@/components/moon/Round6";
 import { useRoom } from "@/lib/moon/use-room";
 import { ClueStack, LinkPill, Presence, SoundButton, StationStrip, TeamIcon, teamTone } from "@/components/moon/Bits";
 import { LunarMap } from "@/components/moon/LunarMap";
@@ -155,6 +156,7 @@ function MainStage({ room, game, round, now }: { room: string; game: GameState |
   if (round === 3) return <Round3Main state={state} game={game} now={now} />;
   if (round === 4) return <Round4Main state={state} game={game} />;
   if (round === 5) return <Round5Main state={state} game={game} />;
+  if (round === 6) return <Round6Main state={state} game={game} />;
   return null;
 }
 
@@ -168,6 +170,7 @@ function TeamStage({ team, game, round }: { team: TeamId; game: GameState | null
   if (round === 3) return <Round3Team state={state} game={game} team={team} />;
   if (round === 4) return <Round4Team state={state} game={game} team={team} />;
   if (round === 5) return <Round5Team state={state} game={game} team={team} />;
+  if (round === 6) return <Round6Team state={state} game={game} team={team} />;
   return null;
 }
 

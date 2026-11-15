@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { LifeBuoy, Package, Rocket, Star, Volume2, Zap } from "lucide-react";
 import { play } from "@/lib/moon/audio";
 import {
+  ALL_ROUNDS,
   INTRO_MINUTES,
   missionTotals,
   nextRound,
@@ -97,7 +98,7 @@ export function WaitCard({ text }: { text: string }) {
 
 /** C12: the teacher ticks the rounds before starting. */
 export function SetupDeck() {
-  const [picked, setPicked] = useState<RoundId[]>([1, 2, 3, 4, 5]);
+  const [picked, setPicked] = useState<RoundId[]>([...ALL_ROUNDS]);
   const minutes = ROUND_INFO.filter((r) => picked.includes(r.id)).reduce((s, r) => s + r.minutes, 0) + INTRO_MINUTES;
   return (
     <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.8fr)]">

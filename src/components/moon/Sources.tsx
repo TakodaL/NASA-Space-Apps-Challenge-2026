@@ -26,15 +26,21 @@ export const SOURCES: { round: string; title: string; what: string; url: string 
   },
   {
     round: "Round 2",
-    title: "Mars–Earth message delay",
+    title: "Mars–Earth message delay (On Mars, light is energy)",
     what: "12 minutes on average (about 3 to 22 minutes, depending on where the planets are).",
     url: "https://science.nasa.gov/resource/on-mars-light-is-energy/",
+  },
+  {
+    round: "Round 2",
+    title: "NASA Mars Trek",
+    what: "Maps and images of the Mars surface.",
+    url: "https://trek.nasa.gov/mars/",
   },
   {
     round: "Round 3",
     title: "DONKI space weather database",
     what: "The solar storm of September 10, 2017: CME 2017-09-10T16:09:00-CME-001 and particle event 2017-09-10T16:25:00-SEP-001.",
-    url: "https://kauai.ccmc.gsfc.nasa.gov/DONKI/",
+    url: "https://ccmc.gsfc.nasa.gov/DONKI/events/13101/1/",
   },
   {
     round: "Round 3",
@@ -61,10 +67,58 @@ export const SOURCES: { round: string; title: string; what: string; url: string 
     url: "https://science.nasa.gov/wp-content/uploads/2023/09/Apollo_12.pdf",
   },
   {
+    round: "Round 4",
+    title: "Canadian Space Agency: what do space explorers eat?",
+    what: "How astronaut food is packed and prepared.",
+    url: "https://www.asc-csa.gc.ca/eng/multimedia/search/image/15774",
+  },
+  {
     round: "Round 5",
     title: "Curiosity finds an ancient streambed (2012)",
     what: "Rounded pebbles show that water once flowed on Mars.",
     url: "https://science.nasa.gov/resource/remnants-of-ancient-streambed-on-mars/",
+  },
+  {
+    round: "Round 5",
+    title: "Conglomerate: Mars vs. Earth (NASA SVS)",
+    what: "Rounded pebbles on Mars next to a similar rock on Earth.",
+    url: "https://svs.gsfc.nasa.gov/vis/a030000/a030500/a030527/conglomerate_mars_vs_earth_pia16189.jpg",
+  },
+  {
+    round: "Round 5",
+    title: "Hottah rock (PIA17062, PIA16156)",
+    what: "The rock outcrop where Curiosity found the pebbles.",
+    url: "https://assets.science.nasa.gov/content/dam/science/psd/mars/resources/detail_files/5316_pia17062_Hottah_WB-full2.jpg",
+  },
+  {
+    round: "Round 6",
+    title: "Canadian Space Agency: Gateway",
+    what: "Crews of four, stays of up to three months, not crewed all the time.",
+    url: "https://www.asc-csa.gc.ca/eng/astronomy/moon-exploration/gateway.asp",
+  },
+  {
+    round: "Round 6",
+    title: "NASA pauses Gateway (March 2026)",
+    what: "NASA paused Gateway to focus on a Moon base.",
+    url: "https://spacepolicyonline.com/news/nasa-rolls-out-new-moon-plan/",
+  },
+  {
+    round: "Round 6",
+    title: "NASA-STD-3001 Volume 2, Table 6.3-1",
+    what: "Daily water minimums per astronaut: 2.5 L for drinking and meals, 0.4 L for personal hygiene.",
+    url: "https://www.nasa.gov/wp-content/uploads/2025/05/nasa-std-3001-vol-2.pdf",
+  },
+  {
+    round: "Round 6",
+    title: "Environmental Control and Life Support Systems (ECLSS)",
+    what: "How the ISS recycles water from urine, sweat and breath.",
+    url: "https://www.nasa.gov/reference/environmental-control-and-life-support-systems-eclss/",
+  },
+  {
+    round: "Round 6",
+    title: "ISS recovers 98% of its water (2023)",
+    what: "The Brine Processor Assembly raised water recovery from urine and sweat to about 98%.",
+    url: "https://www.space.com/astronaut-pee-iss-water-recycling-98-percent-milestone",
   },
 ];
 

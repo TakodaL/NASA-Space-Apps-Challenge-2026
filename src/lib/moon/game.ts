@@ -11,6 +11,7 @@ import round2 from "../../../nasa_backend/Data/round2.json" with { type: "json" 
 import round3 from "../../../nasa_backend/Data/round3.json" with { type: "json" };
 import round4 from "../../../nasa_backend/Data/round4.json" with { type: "json" };
 import round5 from "../../../nasa_backend/Data/round5.json" with { type: "json" };
+import round6 from "../../../nasa_backend/Data/round6.json" with { type: "json" };
 
 const TEAM_IDS: TeamId[] = ["energy", "water", "terrain", "comms"];
 
@@ -18,7 +19,7 @@ const TEAM_IDS: TeamId[] = ["energy", "water", "terrain", "comms"];
 /* Rounds                                                              */
 /* ------------------------------------------------------------------ */
 
-export type RoundId = 1 | 2 | 3 | 4 | 5;
+export type RoundId = 1 | 2 | 3 | 4 | 5 | 6;
 
 export const ROUND_INFO: { id: RoundId; title: string; place: string; minutes: number }[] = [
   { id: 1, title: "Choose your Moon base", place: "Moon", minutes: 8 },
@@ -26,11 +27,13 @@ export const ROUND_INFO: { id: RoundId; title: string; place: string; minutes: n
   { id: 3, title: "Solar storm emergency", place: "Mars", minutes: 10 },
   { id: 4, title: "Pack your space lunch", place: "Moon", minutes: 6 },
   { id: 5, title: "Solve the mystery", place: "Mars", minutes: 7 },
+  { id: 6, title: "Gateway's water system", place: "Moon orbit", minutes: 8 },
 ];
+export const ALL_ROUNDS: RoundId[] = [1, 2, 3, 4, 5, 6];
 export const INTRO_MINUTES = 4;
 
 /** Score keys: Round 3 has two parts. */
-export type ScoreKey = "1" | "2" | "3a" | "3b" | "4" | "5";
+export type ScoreKey = "1" | "2" | "3a" | "3b" | "4" | "5" | "6";
 export const SCORE_MAX: Record<ScoreKey, number> = {
   "1": Math.max(...Object.values(round1.results.points)),
   "2": 3,
@@ -38,6 +41,7 @@ export const SCORE_MAX: Record<ScoreKey, number> = {
   "3b": round3.shelter.maxPoints,
   "4": 3,
   "5": round5.scoring.maxPoints,
+  "6": round6.scoring.maxPoints,
 };
 export const SCORE_LABEL: Record<ScoreKey, string> = {
   "1": "Round 1 · Moon base",
@@ -46,6 +50,7 @@ export const SCORE_LABEL: Record<ScoreKey, string> = {
   "3b": "Round 3 · Best shelter",
   "4": "Round 4 · Best lunch bag",
   "5": "Round 5 · Best answer",
+  "6": "Round 6 · Water tasks right first time",
 };
 export function scoreKeysFor(round: RoundId): ScoreKey[] {
   return round === 3 ? ["3a", "3b"] : [String(round) as ScoreKey];
@@ -259,6 +264,50 @@ export function becauseText(id: ClueId): string {
 }
 
 /* ------------------------------------------------------------------ */
+/* Round 6 · Gateway's water recovery system                           */
+/* ------------------------------------------------------------------ */
+
+export const GATEWAY = round6.setting;
+export type WaterCard = { id: string; label: string; usedToday: boolean; fact: string };
+export const WATER_CARDS: WaterCard[] = round6.sources.cards;
+export type UpgradeId = "A" | "B";
+export const UPGRADES = round6.upgrade.options as Record<UpgradeId, { title: string; card: string; result: string }>;
+export const UPGRADE_PROBLEM: string = round6.upgrade.problem;
+export const UPGRADE_FACT: string = round6.upgrade.fact;
+export const SHARE = round6.share;
+export type SampleId = "A" | "B" | "C";
+export const SAMPLES = round6.sample.samples as Record<SampleId, { minerals: number; unknown: number; best: boolean; result: string }>;
+export const SAMPLE_GUIDE: string[] = round6.sample.guide;
+export const SAMPLE_NOTE: string = round6.sample.note;
+export const ROUND6_FINAL = round6.final;
+
+/** Team 1: every card in the right box? (`sorted` maps card id → true for "used by NASA today"). */
+export function sortCorrect(sorted: Record<string, boolean>): boolean {
+  return WATER_CARDS.every((c) => sorted[c.id] === c.usedToday);
+}
+/** Team 3: does the split match NASA's proportions? */
+export function shareCorrect(drinkingUnits: number): boolean {
+  return drinkingUnits === SHARE.correctUnits.drinkingAndMeals;
+}
+/** Share of the two daily minimums, in % (drinking and meals vs hygiene). */
+export function sharePercents(): { drinking: number; hygiene: number } {
+  const d = SHARE.dailyMinimumLitres.drinkingAndMeals;
+  const h = SHARE.dailyMinimumLitres.hygiene;
+  return { drinking: Math.round((d / (d + h)) * 100), hygiene: Math.round((h / (d + h)) * 100) };
+}
+export function sampleCorrect(id: SampleId): boolean {
+  return !!SAMPLES[id]?.best;
+}
+/** What each Round 6 team sends: how many tries, and whether the last try was right. */
+export type Round6Act = { tries: number; correct: boolean; firstTry: boolean; choice?: string; sorted?: Record<string, boolean>; drinking?: number };
+/** 1 point per scored task done right on the first submit (max 3). Team 2's upgrade is a trade-off: no points. */
+export function round6Points(acts: Partial<Record<TeamId, Round6Act | null>>): number {
+  const scored: TeamId[] = ["energy", "terrain", "comms"];
+  const p = scored.filter((t) => acts[t]?.firstTry).length * round6.scoring.pointsPerTaskFirstTry;
+  return Math.min(round6.scoring.maxPoints, p);
+}
+
+/* ------------------------------------------------------------------ */
 /* Game state                                                          */
 /* ------------------------------------------------------------------ */
 
@@ -317,7 +366,7 @@ export function currentRound(g: GameState | null): RoundId | null {
   return g.rounds[g.index] ?? null;
 }
 
-const FIRST_STAGE: Record<RoundId, string> = { 1: "vote", 2: "plan", 3: "alert", 4: "pack", 5: "think" };
+const FIRST_STAGE: Record<RoundId, string> = { 1: "vote", 2: "plan", 3: "alert", 4: "pack", 5: "think", 6: "tasks" };
 
 /** Set up round at `index` (random parts are chosen here, so Try again re-rolls them). */
 export function enterRound(g: GameState, index: number): GameState {
@@ -526,7 +575,7 @@ const num = (v: unknown, d: number) => (typeof v === "number" && Number.isFinite
 export function sanitizeGame(v: unknown): GameState | null {
   if (!isRec(v) || typeof v.at !== "number" || !Array.isArray(v.rounds)) return null;
   try {
-    const rounds = (v.rounds as unknown[]).filter((r): r is RoundId => [1, 2, 3, 4, 5].includes(r as number));
+    const rounds = (v.rounds as unknown[]).filter((r): r is RoundId => ALL_ROUNDS.includes(r as RoundId));
     const g = JSON.parse(JSON.stringify(v)) as GameState;
     g.rounds = rounds;
     g.at = num(v.at, 0);

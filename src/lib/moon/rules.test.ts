@@ -73,3 +73,21 @@ test("end of mission: score and stars", () => {
   assert.equal(skip.power, 2, "skipped Round 2 leaves 2 battery units");
   assert.deepEqual(skip.water, G.WATER_BY_SITE.C, "skipped Round 1 uses site C");
 });
+
+test("round 6: Gateway water tasks", () => {
+  const right = Object.fromEntries(G.WATER_CARDS.map((c) => [c.id, c.usedToday]));
+  assert.equal(G.sortCorrect(right), true);
+  assert.equal(G.sortCorrect({ ...right, comet: true }), false);
+  assert.equal(G.WATER_CARDS.filter((c) => c.usedToday).length, 5);
+  assert.equal(G.shareCorrect(17), true);
+  assert.equal(G.shareCorrect(15), false);
+  assert.deepEqual(G.sharePercents(), { drinking: 86, hygiene: 14 });
+  assert.equal(G.sampleCorrect("A"), true);
+  assert.equal(G.sampleCorrect("C"), false);
+  const first = { tries: 1, correct: true, firstTry: true };
+  const later = { tries: 2, correct: true, firstTry: false };
+  assert.equal(G.round6Points({ energy: first, water: first, terrain: later, comms: first }), 2, "upgrade is a trade-off, not scored");
+  assert.equal(G.SCORE_MAX["6"], 3);
+  const g = { ...G.newGame([...G.ALL_ROUNDS]), scores: { "1": 3, "2": 3, "3a": 3, "3b": 6, "4": 3, "5": 3, "6": 3 } };
+  assert.deepEqual(G.missionTotals(g), { points: 24, max: 24, stars: 3 });
+});

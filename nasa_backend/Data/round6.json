@@ -1,0 +1,65 @@
+{
+  "round": 6,
+  "title": "Gateway's Water Recovery System",
+  "setting": {
+    "station": "Gateway",
+    "crew": 4,
+    "maxStayMonths": 3,
+    "status": "NASA paused Gateway on March 24, 2026 to focus on a Moon base. Its plans still show how a station far from Earth could keep its water working.",
+    "source": "Canadian Space Agency, Gateway"
+  },
+  "steps": ["tasks", "results"],
+  "sources": {
+    "cards": [
+      { "id": "urine", "label": "Urine", "usedToday": true, "fact": "The ISS recovers water from astronauts' urine." },
+      { "id": "breath", "label": "Moisture from breath", "usedToday": true, "fact": "The ISS collects moisture from cabin air, including moisture from astronauts' breath." },
+      { "id": "sweat", "label": "Sweat", "usedToday": true, "fact": "Moisture from sweat enters the cabin air and can be collected with other humidity." },
+      { "id": "earth", "label": "Water brought from Earth", "usedToday": true, "fact": "Water is transported to the ISS by cargo spacecraft." },
+      { "id": "humidity", "label": "Water recovered from cabin humidity", "usedToday": true, "fact": "The ISS water recovery system collects and treats this water." },
+      { "id": "moon", "label": "Water collected from the Moon", "usedToday": false, "fact": "Not used today." },
+      { "id": "lunar_ice", "label": "Water made from lunar ice", "usedToday": false, "fact": "Not used today." },
+      { "id": "comet", "label": "Water collected from a comet", "usedToday": false, "fact": "Not used today." }
+    ]
+  },
+  "upgrade": {
+    "problem": "The station has two problems: it needs to save more water, and it needs a way to store extra water for later. You can add only one upgrade.",
+    "options": {
+      "A": {
+        "title": "Recover more water",
+        "card": "An extra machine collects more water from the salty liquid left after urine is processed.",
+        "result": "You lose less water every day, but you have no extra water saved if something breaks or a delivery is late."
+      },
+      "B": {
+        "title": "Store extra water",
+        "card": "An extra tank keeps water for later.",
+        "result": "You have water ready for emergencies, but more water is lost every day, so the station depends on deliveries from Earth."
+      }
+    },
+    "fact": "In 2023 a machine like option A (the Brine Processor Assembly) helped the ISS recover about 98% of the water from urine and sweat."
+  },
+  "share": {
+    "totalUnits": 20,
+    "litresPerUnit": 0.1,
+    "dailyMinimumLitres": { "drinkingAndMeals": 2.5, "hygiene": 0.4 },
+    "correctUnits": { "drinkingAndMeals": 17, "hygiene": 3 },
+    "source": "NASA-STD-3001 Volume 2, Table 6.3-1"
+  },
+  "sample": {
+    "guide": [
+      "Water: should be present.",
+      "Useful minerals: okay in the right amount.",
+      "Unknown particles: need more testing."
+    ],
+    "samples": {
+      "A": { "minerals": 4, "unknown": 1, "best": true, "result": "Best choice." },
+      "B": { "minerals": 1, "unknown": 1, "best": false, "result": "Few unknown particles, but too few useful minerals." },
+      "C": { "minerals": 5, "unknown": 4, "best": false, "result": "Plenty of useful minerals, but too many unknown particles." }
+    },
+    "note": "Practice samples to show how water is checked. Not real NASA test results."
+  },
+  "scoring": { "pointsPerTaskFirstTry": 1, "scoredTasks": ["sources", "share", "sample"], "maxPoints": 3 },
+  "final": {
+    "message": "Mission completed! Together, you found water sources, upgraded the system, shared the supply and checked a water sample. Your teamwork helped Gateway's crew prepare for life around the Moon!",
+    "discussion": "If you could improve one part of your water system before the next mission, what would you change, and why? Share what you learned in this round with the class and discuss what future advances could make the system better."
+  }
+}
