@@ -1,4 +1,4 @@
-# Artemis Junior
+# UNOCCUPIED
 
 A classroom space mission for kids aged 7–12. It runs in any browser: a class screen plus one device per team. You can also play it on a single device. There are no accounts, no names and no typing, apart from the 4-character class code.
 

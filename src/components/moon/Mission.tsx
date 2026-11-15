@@ -66,7 +66,7 @@ export function Mission({
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <Eyebrow>
-            {game?.done ? "Artemis Junior · Mission complete" : info ? `Artemis Junior · Round ${info.id} · ${info.place}` : "Artemis Junior · Mission setup"}
+            {game?.done ? "UNOCCUPIED · Mission complete" : info ? `UNOCCUPIED · Round ${info.id} · ${info.place}` : "UNOCCUPIED · Mission setup"}
           </Eyebrow>
           <h1 className="mt-1 font-display text-2xl font-semibold md:text-3xl">
             {role === "main" ? "Class screen" : TEAM_META[role].label}

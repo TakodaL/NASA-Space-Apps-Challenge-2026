@@ -36,7 +36,7 @@ export function Lobby({
   return (
     <div className="grid items-start gap-4 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="rise">
-        <Eyebrow>NASA Junior · Rounds 1–6</Eyebrow>
+        <Eyebrow>UNOCCUPIED · Rounds 1–6</Eyebrow>
         <h1 className="mt-3 max-w-xl font-display text-4xl font-semibold tracking-tight text-fg md:text-6xl">
           Run a space mission
         </h1>
