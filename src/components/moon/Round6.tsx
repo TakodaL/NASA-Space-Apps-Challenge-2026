@@ -304,7 +304,7 @@ function ShareTask({ team, prev }: { team: TeamId; prev: Round6Act | null }) {
     <div>
       <ReadCard
         title="Share the water"
-        text={`You have ${litres(total)} litres of water (${total} units of ${SHARE.litresPerUnit} L). Share the units between Drinking and meals and Personal hygiene. Then press Submit to compare your plan with NASA's daily minimums for one astronaut.`}
+        text={`You have ${litres(total)} litres of water (${total} units of ${SHARE.litresPerUnit} L). Share the units between Drinking and meals and Personal hygiene. Then press Submit to compare your plan with NASA's daily minimums for one astronaut. Your ${litres(total)} L is less than one astronaut needs in a day, so this task is about how to split the water, not how much there is.`}
       />
       <div className="mt-3 grid grid-cols-10 gap-1.5" role="img" aria-label={`${drink} units for drinking and meals, ${hyg} units for hygiene`}>
         {Array.from({ length: total }, (_, i) => (
