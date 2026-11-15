@@ -328,7 +328,7 @@ export type GameState = {
   snap: Snapshot; // meters at the start of the current round (for Try again)
   r2: R2State;
   r3: R3State;
-  emergency: { cause: string; tip: string } | null;
+  emergency: { cause: string; tip: string; resume?: string } | null;
 };
 
 export function newGame(rounds: RoundId[]): GameState {

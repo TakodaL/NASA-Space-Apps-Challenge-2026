@@ -99,7 +99,7 @@ export function Mission({
           </button>
         </div>
       </div>
-      {game && game.started && !game.done && <MeterBar game={game} />}
+      {game && game.started && !game.done && round !== null && round >= 2 && <MeterBar game={game} />}
       {role === "main" ? (
         <MainStage room={room} game={game} round={round} now={now} />
       ) : (

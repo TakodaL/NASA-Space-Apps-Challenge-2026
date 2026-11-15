@@ -201,8 +201,15 @@ export function EmergencyScreen({ game }: { game: GameState }) {
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           <Button onClick={() => { play("tap"); setGame(retryRound(game)); }}>Try Round {round} again</Button>
-          <Button variant="ghost" onClick={() => { play("send"); setGame({ ...nextRound(game) }); }}>
-            Continue the mission
+          <Button
+            variant="ghost"
+            onClick={() => {
+              play("send");
+              const resume = game.emergency?.resume;
+              setGame(resume ? { ...game, emergency: null, stage: resume, at: Date.now() } : nextRound(game));
+            }}
+          >
+            {game.emergency?.resume === "shelter" ? "Continue to Part 2: the shelter" : "Continue the mission"}
           </Button>
         </div>
         <p className="text-sm text-muted">

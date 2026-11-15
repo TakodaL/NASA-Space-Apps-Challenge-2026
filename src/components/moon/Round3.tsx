@@ -173,6 +173,7 @@ function RescueResult({ game }: { game: GameState }) {
                     ? "The rover had no battery left from Round 2, so the farthest explorer could not get back in 8 minutes."
                     : "The rover went to someone who could have walked, so the farthest explorer could not get back in 8 minutes.",
                   tip: "Give the rover to the explorer who is farthest away, and keep 1 battery unit for it.",
+                  resume: "shelter",
                 },
               });
             }}
