@@ -45,7 +45,7 @@ function status(sys: SystemId, level: Level): { text: string; bad: boolean } {
     return level === 0
       ? { text: "Growth paused · packed food bag eaten", bad: true }
       : { text: level === 1 ? "Limited growth · food bag kept" : "Normal growth · food bag kept", bad: false };
-  return { text: ["No signal · no forecast", "Short message sent", "Long message sent"][level], bad: level === 0 };
+  return { text: ["No message sent", "Short message sent", "Long message sent"][level], bad: false };
 }
 
 /* ---------------- class screen ---------------- */
@@ -197,6 +197,7 @@ function DayResult({ game }: { game: GameState }) {
     };
   }, [r2.day]);
   const moreDays = !failed && r2.day < r2.stormDays;
+  const waiting = sent && r2.day === 1 && !arrived;
 
   return (
     <div className="grid gap-4">
@@ -271,15 +272,17 @@ function DayResult({ game }: { game: GameState }) {
           </Button>
         ) : moreDays ? (
           <Button
+            disabled={waiting}
             onClick={() => {
               play("tap");
               setGame({ ...game, stage: "warning", r2: { ...r2, day: r2.day + 1, plan: {} } });
             }}
           >
-            Continue
+            {waiting ? "Waiting for Earth…" : "Continue"}
           </Button>
         ) : (
           <Button
+            disabled={waiting}
             onClick={() => {
               play("lock");
               setGame({ ...game, stage: "done" });

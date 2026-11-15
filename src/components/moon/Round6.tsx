@@ -304,7 +304,7 @@ function ShareTask({ team, prev }: { team: TeamId; prev: Round6Act | null }) {
     <div>
       <ReadCard
         title="Share the water"
-        text={`You have ${litres(total)} litres of water (${total} units of ${SHARE.litresPerUnit} L). Share the units between Drinking and meals and Personal hygiene. Then press Submit to compare your plan with NASA's daily minimums for one astronaut.`}
+        text={`You have ${litres(total)} litres of water (${total} units of ${SHARE.litresPerUnit} L). Share the units between Drinking and meals and Personal hygiene. Then press Submit to compare your plan with NASA's daily minimums for one astronaut. Your ${litres(total)} L is less than one astronaut needs in a day, so this task is about how to split the water, not how much there is.`}
       />
       <div className="mt-3 grid grid-cols-10 gap-1.5" role="img" aria-label={`${drink} units for drinking and meals, ${hyg} units for hygiene`}>
         {Array.from({ length: total }, (_, i) => (
@@ -378,7 +378,7 @@ function SampleTask({ team, prev }: { team: TeamId; prev: Round6Act | null }) {
               className={cn("rounded-2xl px-4 py-3 text-left transition-transform active:scale-[0.98]", pick === id ? "bg-accent/15 ring-2 ring-accent" : "bg-bg/50")}
             >
               <span className="font-display text-base font-semibold">Sample {id}</span>
-              <span className="mt-2 flex flex-wrap items-center gap-1" aria-label={`Water, ${s.minerals} useful minerals, ${s.unknown} unknown particles`}>
+              <span className="mt-2 flex flex-wrap items-center gap-1" aria-label={`Water, ${s.minerals} useful ${s.minerals === 1 ? "mineral" : "minerals"}, ${s.unknown} unknown ${s.unknown === 1 ? "particle" : "particles"}`}>
                 <Droplets className="size-5 text-accent" aria-hidden />
                 {Array.from({ length: s.minerals }, (_, i) => (
                   <span key={`m${i}`} className="size-3.5 rounded-full bg-good" aria-hidden />
@@ -388,7 +388,7 @@ function SampleTask({ team, prev }: { team: TeamId; prev: Round6Act | null }) {
                 ))}
               </span>
               <span className="mt-1 block text-xs text-muted">
-                {s.minerals} useful minerals · {s.unknown} unknown {s.unknown === 1 ? "particle" : "particles"}
+                {s.minerals} useful {s.minerals === 1 ? "mineral" : "minerals"} · {s.unknown} unknown {s.unknown === 1 ? "particle" : "particles"}
               </span>
             </button>
           );

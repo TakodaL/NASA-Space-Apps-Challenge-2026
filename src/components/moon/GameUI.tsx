@@ -87,6 +87,29 @@ export function MeterBar({ game }: { game: GameState }) {
   );
 }
 
+/** Class-screen countdown from `start` (ms). It never moves the game on by itself; the teacher decides. */
+export function Countdown({ start, minutes }: { start: number; minutes: number }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = window.setInterval(() => setNow(Date.now()), 500);
+    return () => window.clearInterval(id);
+  }, []);
+  const left = Math.max(0, Math.ceil((start + minutes * 60000 - now) / 1000));
+  const done = left === 0;
+  return (
+    <p
+      role="timer"
+      aria-live={done ? "polite" : "off"}
+      className={cn(
+        "inline-flex min-h-11 items-center rounded-full px-4 font-display text-2xl font-semibold tabular-nums",
+        done ? "bg-warn/15 text-warn" : "bg-surface-2",
+      )}
+    >
+      {done ? "Time's up!" : `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`}
+    </p>
+  );
+}
+
 /** Shown on team devices when there is nothing for them to do right now. */
 export function WaitCard({ text }: { text: string }) {
   return (
@@ -201,8 +224,15 @@ export function EmergencyScreen({ game }: { game: GameState }) {
         </div>
         <div className="flex flex-wrap justify-center gap-3">
           <Button onClick={() => { play("tap"); setGame(retryRound(game)); }}>Try Round {round} again</Button>
-          <Button variant="ghost" onClick={() => { play("send"); setGame({ ...nextRound(game) }); }}>
-            Continue the mission
+          <Button
+            variant="ghost"
+            onClick={() => {
+              play("send");
+              const resume = game.emergency?.resume;
+              setGame(resume ? { ...game, emergency: null, stage: resume, at: Date.now() } : nextRound(game));
+            }}
+          >
+            {game.emergency?.resume === "shelter" ? "Continue to Part 2: the shelter" : "Continue the mission"}
           </Button>
         </div>
         <p className="text-sm text-muted">

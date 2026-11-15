@@ -4,7 +4,7 @@ import { play } from "@/lib/moon/audio";
 import { FOODS, LUNCH_LIMITS, LUNCH_MINUTES, lunchPoints, lunchTotals, readAct, type FoodId, type GameState } from "@/lib/moon/game";
 import { TEAMS, TEAM_META, type RoomState, type TeamId } from "@/lib/moon/model";
 import { sendAct, setGame } from "@/lib/moon/sync";
-import { NextRoundButton, ReadCard, SpeakButton, WaitCard } from "@/components/moon/GameUI";
+import { Countdown, NextRoundButton, ReadCard, SpeakButton, WaitCard } from "@/components/moon/GameUI";
 import { Button, Card, cn, Eyebrow } from "@/components/moon/ui";
 
 const INTRO =
@@ -29,7 +29,8 @@ export function Round4Main({ state, game }: { state: RoomState; game: GameState 
           <p className="mt-3 text-sm text-faint">These foods are from NASA's Apollo 12 crew menu. Teams can't see the numbers yet.</p>
         </Card>
         <Card className="rise-2">
-          <p className="font-display text-base font-semibold">Bags sent: {sent.length}</p>
+          <Countdown key="pack" start={game.at} minutes={LUNCH_MINUTES.pack} />
+          <p className="mt-3 font-display text-base font-semibold">Bags sent: {sent.length}</p>
           <ul className="mt-2 grid gap-2 text-sm">
             {TEAMS.map((t) => (
               <li key={t} className="flex justify-between rounded-lg bg-bg/50 px-3 py-2">
@@ -86,6 +87,11 @@ export function Round4Main({ state, game }: { state: RoomState; game: GameState 
             </tbody>
           </table>
         </div>
+        {game.stage === "improve" && (
+          <div className="mt-3">
+            <Countdown key="improve" start={game.at} minutes={LUNCH_MINUTES.improve} />
+          </div>
+        )}
         {game.stage === "improve" ? (
           <Button
             className="mt-4"

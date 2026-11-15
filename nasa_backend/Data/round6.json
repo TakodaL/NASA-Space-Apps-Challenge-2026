@@ -47,8 +47,8 @@
   "sample": {
     "guide": [
       "Water: should be present.",
-      "Useful minerals: okay in the right amount.",
-      "Unknown particles: need more testing."
+      "Useful minerals: good in the right amount. Too few is not enough.",
+      "Unknown particles: need more testing. The fewer, the safer."
     ],
     "samples": {
       "A": { "minerals": 4, "unknown": 1, "best": true, "result": "Best choice." },
