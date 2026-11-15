@@ -36,13 +36,13 @@ export function Lobby({
   return (
     <div className="grid items-start gap-4 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="rise">
-        <Eyebrow>NASA Junior · Rounds 1–5</Eyebrow>
+        <Eyebrow>NASA Junior · Rounds 1–6</Eyebrow>
         <h1 className="mt-3 max-w-xl font-display text-4xl font-semibold tracking-tight text-fg md:text-6xl">
           Run a space mission
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-muted md:text-lg">
-          Choose a Moon base, survive a Martian dust storm, shelter from a solar storm, pack a space lunch and
-          solve a mystery on Mars, using real NASA data. The teacher picks which rounds to play.
+          Choose a Moon base, survive a Martian dust storm, shelter from a solar storm, pack a space lunch,
+          solve a mystery on Mars and keep a Moon-orbit station's water working, using real NASA data. The teacher picks which rounds to play.
         </p>
         <ol className="mt-6 grid gap-3 sm:grid-cols-3">
           {[
